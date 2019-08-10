@@ -1,0 +1,18 @@
+---
+- name: Check if docker is installed
+  shell: whereis docker
+  register: docker_installed
+  failed_when: no
+  changed_when: no
+
+- name: Install latest Docker
+  become: yes
+  shell: curl -s https://get.docker.com | bash
+  when: docker_installed.rc != 0
+
+- name: Add default user to docker group
+  become: yes
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes

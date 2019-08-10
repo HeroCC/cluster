@@ -1,0 +1,27 @@
+---
+- name: Update apt repos
+  when: "ansible_distribution == 'Debian'"
+  become: yes
+  apt:
+    update_cache: yes
+- name: Update arch
+  become: yes
+  when: "ansible_distribution == 'Archlinux'"
+  pacman:
+    upgrade: yes
+    update_cache: yes
+- name: Install favorite packages
+  become: yes
+  vars:
+    packages:
+      - vim
+      - git
+      - screen
+      - tmux
+      - htop
+      - python3
+  package:
+    name: "{{ packages }}"
+    state: latest
+
+

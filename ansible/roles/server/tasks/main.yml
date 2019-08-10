@@ -1,0 +1,16 @@
+---
+- name: Check if zerotier is installed
+  shell: whereis zerotier-cli
+  register: zt_installed
+  failed_when: no
+  changed_when: no
+
+- name: Install ZeroTier
+  become: yes
+  shell: curl -s https://install.zerotier.com | bash
+  when: zt_installed.rc != 0
+
+- name: Join CCS ZeroTier Network
+  become: yes
+  shell: zerotier-cli join a09acf0233b14b4a
+
